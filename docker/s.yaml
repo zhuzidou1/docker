@@ -1,0 +1,26 @@
+kind: Pipeline
+name: "image-build-pipeline"
+description: 'demo pipeline'
+labels:
+  myLabel: image-build
+spec:
+  templateSpec:
+    tasks:
+      - name: build-push
+        context:
+          data:
+            # 任务显示名字，用于在控制台中展示
+            displayName: 镜像构建
+            # 打开任务执行，默认关闭
+            enable: true
+            # 指定构建信息
+            build: 
+              # 指定dockerfile，使用代码仓库中的相对路径。不指定时默认为./Dockerfile
+              dockerfile: code/Dockerfile
+              # 指定镜像名，必须是ACR镜像
+              image: registry-vpc.cn-hangzhou.aliyuncs.com/pipeline-demo/demo-repo:latest
+              # 指定构建上下文目录。不指定时默认使用Dockerfile所在目录
+              context: ./context
+        # 任务模板指定为内置的模板build-image-task
+        taskTemplate: build-image-task
+        runAfters: []
